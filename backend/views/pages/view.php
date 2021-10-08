@@ -8,7 +8,7 @@ use yii\widgets\DetailView;
 /* @var $model common\models\entity\News */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'News', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Laman', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -34,8 +34,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'attributes' => [
                 // 'id',
                 'title',
-                'category.category_name:text:Category',
-                'subcategory.name:text:Subcategory',
                 'publish_at:date',
                 'author.name:text:Author',
                 'content:ntext',

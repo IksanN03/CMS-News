@@ -15,7 +15,7 @@ use common\models\entity\User;
 /* @var $searchModel common\models\search\NewsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Artikel';
+$this->title = 'Laman';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -28,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'id',
         'title',
-        'category.category_name:text:Category',
         'publish_at:datetime',
         'author.name:text:Author',
         'content',

@@ -72,19 +72,7 @@ use kartik\widgets\DatePicker;
                                 ]); ?>
                                 <?= $form->field($model, 'author_id')->widget(Select2::classname(), [
                                     'data' => ArrayHelper::map(User::find()->all(), 'id', 'name'),
-                                    'options' => ['placeholder' => ''],
-                                    'pluginOptions' => ['allowClear' => true],
-                                ]); ?>
-                            </div>
-                        </div>
-                        <div class="panel panel-warning" style="margin-top:30px">
-                            <div class="panel-heading" style="background:#A9E4D7;">
-                                Kategori
-                            </div>
-                            <div class="panel-body">
-                                <?= $form->field($model, 'category_id')->widget(Select2::classname(), [
-                                    'data' => ArrayHelper::map(Category::find()->all(), 'id', 'category_name'),
-                                    'options' => ['placeholder' => '', 'prompt' => 'Pilih Kategori', 'id' => 'cat-id'],
+                                    'options' => ['placeholder' => '', 'value' => Yii::$app->user->identity->id],
                                     'pluginOptions' => ['allowClear' => true],
                                 ]); ?>
                             </div>

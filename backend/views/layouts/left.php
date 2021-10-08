@@ -53,14 +53,26 @@ $model1 = Menu::find()->all();
                     ],
                 ],
                 [
-                    'label' => '<font color="white">Manajemen Berita</font>',
+                    'label' => '<font color="white">Manajemen Laman</font>',
+                    'icon' => 'clone',
+                    'encode' => false,
+                    'url' => '#',
+                    'options' => ['class' => 'treeview'],
+                    'items' => [
+                        ['label' => '<font color="white">Laman</font>', 'encode' => false, 'icon' => 'file-o', 'url' => ['/pages/index']],
+                        ['label' => '<font color="white">Tambah Laman</font>', 'encode' => false, 'icon' => 'plus', 'url' => ['/pages/create']],
+                    ],
+                ],
+                [
+                    'label' => '<font color="white">Manajemen Artikel</font>',
                     'icon' => 'folder',
                     'encode' => false,
                     'url' => '#',
                     'options' => ['class' => 'treeview'],
                     'items' => [
                         ['label' => '<font color="white">Kategori</font>', 'encode' => false, 'icon' => 'list', 'url' => ['/category/index']],
-                        ['label' => '<font color="white">Berita</font>', 'encode' => false, 'icon' => 'newspaper-o', 'url' => ['/news/index']],
+                        ['label' => '<font color="white">Artike</font>', 'encode' => false, 'icon' => 'newspaper-o', 'url' => ['/news/index']],
+                        ['label' => '<font color="white">Tambah Artikel</font>', 'encode' => false, 'icon' => 'plus', 'url' => ['/news/create']],
                     ],
                 ],
                 [

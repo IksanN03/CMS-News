@@ -4,16 +4,16 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\entity\News */
+/* @var $model common\models\entity\Pages */
 
-$this->title = 'Tambah Artikel';
-$this->params['breadcrumbs'][] = ['label' => 'Artikel', 'url' => ['index']];
+$this->title = 'Tambah Laman';
+$this->params['breadcrumbs'][] = ['label' => 'Laman', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="news-create">
+<div class="pages-create">
 
 	<?= $this->render('_form', [
 		'model' => $model,
 	]) ?>
-
+    
 </div>

@@ -5,11 +5,10 @@ namespace common\models\entity;
 use Yii;
 
 /**
- * This is the model class for table "news".
+ * This is the model class for table "pages".
  *
  * @property integer $id
  * @property string $title
- * @property integer $category_id
  * @property integer $publish_at
  * @property integer $author_id
  * @property string $content
@@ -20,19 +19,9 @@ use Yii;
  * @property integer $updated_at
  * @property integer $created_by
  * @property integer $updated_by
- *
- * @property Files[] $files
- * @property User $author
- * @property Category $category
- * @property User $createdBy
- * @property User $updatedBy
  */
-class News extends \yii\db\ActiveRecord
+class Pages extends \yii\db\ActiveRecord
 {
-    use \mdm\behaviors\ar\RelationTrait;
-    /**
-     * @inheritdoc
-     */
     const STATUS_DRAF = 0;
     const STATUS_PUBLISH = 1;
 
@@ -52,6 +41,10 @@ class News extends \yii\db\ActiveRecord
         return null;
     }
 
+
+    /**
+     * @inheritdoc
+     */
     public function behaviors()
     {
         return [
@@ -65,7 +58,7 @@ class News extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'news';
+        return 'pages';
     }
 
     /**
@@ -74,16 +67,10 @@ class News extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'author_id', 'content', 'status'], 'required'],
-            [['category_id', 'publish_at', 'author_id', 'views', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['title', 'author_id', 'content'], 'required'],
+            [['id', 'publish_at', 'author_id', 'views', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['content'], 'string'],
             [['title', 'photo'], 'string', 'max' => 225],
-            [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
-            [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
-            [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
-            [['subcategory_id'], 'exist', 'skipOnError' => true, 'targetClass' => Subcategory::className(), 'targetAttribute' => ['subcategory_id' => 'id']],
-
         ];
     }
 
@@ -94,13 +81,11 @@ class News extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Judul Berita',
-            'category_id' => 'Nama Kategori',
-            'subcategory_id' => 'Nama SubKategori',
+            'title' => 'Judul Laman',
             'publish_at' => 'Tanggal Publish',
             'author_id' => 'Nama Penulis',
-            'content' => 'isi Berita',
-            'photo' => 'Foto',
+            'content' => 'Konten',
+            'photo' => 'Photo',
             'views' => 'views',
             'status' => 'Status',
             'created_at' => 'Created At',
@@ -108,19 +93,6 @@ class News extends \yii\db\ActiveRecord
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getFiles()
-    {
-        return $this->hasMany(Files::className(), ['news_id' => 'id']);
-    }
-
-    public function setFiles($value)
-    {
-        $this->loadRelated('files', $value);
     }
 
     public static function uploadableFields()
@@ -146,14 +118,6 @@ class News extends \yii\db\ActiveRecord
     public function getAuthor()
     {
         return $this->hasOne(User::className(), ['id' => 'author_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategory()
-    {
-        return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
     /**
