@@ -8,17 +8,14 @@ use Yii;
  * This is the model class for table "submenu".
  *
  * @property integer $id
- * @property integer $id_menu
- * @property string $sub_title
- * @property string $sub_url
- * @property integer $status
- * @property integer $category_id
+ * @property integer $menu_id
+ * @property string $name
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $created_by
  * @property integer $updated_by
  *
- * @property Menu $idMenu
+ * @property Menu $menu
  */
 class Submenu extends \yii\db\ActiveRecord
 {
@@ -47,10 +44,9 @@ class Submenu extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_menu', 'sub_title', 'sub_url', 'status'], 'required'],
-            [['id_menu', 'status', 'category_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['sub_title', 'sub_url'], 'string', 'max' => 50],
-            [['id_menu'], 'exist', 'skipOnError' => true, 'targetClass' => Menu::className(), 'targetAttribute' => ['id_menu' => 'id']],
+            [['menu_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['name'], 'string', 'max' => 100],
+            [['menu_id'], 'exist', 'skipOnError' => true, 'targetClass' => Menu::className(), 'targetAttribute' => ['menu_id' => 'id']],
         ];
     }
 
@@ -61,11 +57,8 @@ class Submenu extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'id_menu' => 'Menu Utama',
-            'sub_title' => 'Judul Submenu',
-            'sub_url' => 'Sub Url',
-            'status' => 'Status',
-            'category_id' => 'Category',
+            'menu_id' => 'Menu',
+            'name' => 'Name',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
@@ -76,8 +69,8 @@ class Submenu extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdMenu()
+    public function getMenu()
     {
-        return $this->hasOne(Menu::className(), ['id' => 'id_menu']);
+        return $this->hasOne(Menu::className(), ['id' => 'menu_id']);
     }
 }

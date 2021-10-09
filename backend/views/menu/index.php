@@ -2,11 +2,17 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 use kartik\export\ExportMenu;
+use kartik\widgets\Select2;
+use common\models\entity\Category;
+use common\models\entity\Pages;
+use common\models\entity\Sub;
+use common\models\entity\Submenu;
 
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\search\MenuSearch */
+/* @var $searchModel common\models\entity\MenuSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Menu';
@@ -21,10 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'yii\grid\SerialColumn',
         ],
         'id',
-        'title',
-        'url:url',
-        'icon',
-        'status',
+        'category.category_name:text:Category',
+        'pages.name:text:Pages',
+        'parent.name:text:Parent',
         'created_at:datetime',
         'updated_at:datetime',
         'createdBy.username:text:Created By',
@@ -60,6 +65,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'pjaxContainerId' => 'grid',
     ]);
 
+    $db = yii::$app->db;
+    $data5 = $db->createCommand("select name from submenu")->queryAll();
+
     $gridColumns = [
         [
             'class' => 'yii\grid\SerialColumn',
@@ -67,22 +75,35 @@ $this->params['breadcrumbs'][] = $this->title;
             'contentOptions' => ['class' => 'text-right serial-column'],
         ],
         // 'id',
-        'title',
-        'url:url',
-        'icon',
         [
-            'attribute' => 'status',
-            'label' => 'Status',
-            'format' => 'html',
-            'headerOptions' => ['class' => 'text-left'],
-            'contentOptions' => ['class' => 'text-center'],
-            'value' => function ($model) {
-                if ($model->status == '1') {
-                    return '<span class="label label-success">Aktif</span>';
-                } else {
-                    return '<span class="label label-danger">Non Aktif</span>';
-                }
-            }
+            'attribute' => 'category_id',
+            'value' => 'category.category_name',
+            'filterType' => GridView::FILTER_SELECT2,
+            'filter' => ArrayHelper::map(Category::find()->orderBy('category_name')->asArray()->all(), 'id', 'category_name'),
+            'filterInputOptions' => ['placeholder' => ''],
+            'filterWidgetOptions' => [
+                'pluginOptions' => ['allowClear' => true],
+            ],
+        ],
+        [
+            'attribute' => 'pages_id',
+            'value' => 'pages.title',
+            'filterType' => GridView::FILTER_SELECT2,
+            'filter' => ArrayHelper::map(Pages::find()->orderBy('title')->asArray()->all(), 'id', 'title'),
+            'filterInputOptions' => ['placeholder' => ''],
+            'filterWidgetOptions' => [
+                'pluginOptions' => ['allowClear' => true],
+            ],
+        ],
+        [
+            'attribute' => 'id',
+            'value' => 'submenus.name',
+            'filterType' => GridView::FILTER_SELECT2,
+            'filter' => ArrayHelper::map(Submenu::find()->orderBy('name')->asArray()->all(), 'id', 'name'),
+            'filterInputOptions' => ['placeholder' => ''],
+            'filterWidgetOptions' => [
+                'pluginOptions' => ['allowClear' => true],
+            ],
         ],
         [
             'contentOptions' => ['class' => 'action-column nowrap text-left'],

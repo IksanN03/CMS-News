@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\UploadedFile;
 
 /**
@@ -222,6 +223,28 @@ class NewsController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionCkeditorupload()
+    {
+        $funcNum = $_REQUEST['CKEditorFuncNum'];
+
+        if (isset($_FILES['upload']['tmp_name'])) {
+
+            $file = $_FILES['upload']['tmp_name'];
+            $fileName = $_FILES['upload']['name'];
+            $fileNameArray = explode(".", $fileName);
+            $extension = end($fileNameArray);
+            $newImageName = rand() . "." . $extension;
+            $allowExtention = array("jpg", "jpeg", "png", "JPG", "JPEG", "PNG");
+            if (in_array($extension, $allowExtention)) {
+                move_uploaded_file($file, "./uploads" . $newImageName);
+                $url = Url::base() . "/uploads" . $newImageName;
+                $message = "";
+                echo '<script type="text/javascript">window.parent.CKEDITOR.tools.callFunction("'
+                    . $funcNum . '", "' . $url . '", "' . $message . '" );</script>';
+            }
         }
     }
 }

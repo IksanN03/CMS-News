@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\entity\Menu */
 
-$this->title = $model->title;
+$this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Menu', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -33,23 +33,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'model' => $model,
             'attributes' => [
                 // 'id',
-                'title',
-                'url:url',
-                'icon',
-                [
-                    'attribute' => 'status',
-                    'label' => 'Status',
-                    'format' => 'html',
-                    'headerOptions' => ['class' => 'text-left'],
-                    'contentOptions' => ['class' => 'text-center'],
-                    'value' => function ($model) {
-                        if ($model->status == '1') {
-                            return '<span class="label label-success">Aktif</span>';
-                        } else {
-                            return '<span class="label label-danger">Non Aktif</span>';
-                        }
-                    }
-                ],
+                'category.name:text:Category',
+                'pages.name:text:Pages',
+                'submenus.nama',
                 // 'created_at:datetime',
                 // 'updated_at:datetime',
                 // 'createdBy.username:text:Created By',

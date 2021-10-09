@@ -146,7 +146,7 @@ $this->title = 'PPID Politeknik Negeri Padang';
                 <span class="fa  fa-caret-square-o-down fa-3x"></span>
             </div>
             <div class="col-md-9 text-right">
-                <span style="font-size:25pt;font-weight:bold;"><?= Submenu::find()->count() ?></span><br>
+                <span style="font-size:25pt;font-weight:bold;"></span><br>
                 <span style="font-size:10pt;font-weight:bold;">SubMenu</span>
             </div>
         </div>

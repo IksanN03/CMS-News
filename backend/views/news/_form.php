@@ -9,9 +9,7 @@ use common\models\entity\Category;
 use common\models\entity\User;
 use common\models\entity\Files;
 use common\models\entity\News;
-use mdm\widgets\TabularInput;
 use dosamigos\ckeditor\CKEditor;
-use kartik\depdrop\DepDrop;
 use kartik\widgets\DatePicker;
 
 /* @var $this yii\web\View */
@@ -25,7 +23,7 @@ use kartik\widgets\DatePicker;
     <div class="row">
         <div class="col-md-12 col-sm-12">
 
-            <?php $form = ActiveForm::begin(); ?>
+            <?php $form = ActiveForm::begin(['method' => 'post', 'options' => ['enctype' => 'multipart/form-data']]); ?>
             <div class="row">
                 <div class="col-md-8">
                     <div class="panel panel-warning" style="margin-top:30px">
@@ -35,11 +33,32 @@ use kartik\widgets\DatePicker;
                         <div class="panel-body">
                             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
+                            <?= $form->field($model, 'content')
+                                ->widget(
+                                    CKEditor::className(),
+                                    [
+                                        'options' => [],
+                                        'preset' => 'full',
+                                        'clientOptions' => [
+                                            'extraPlugins' => '',
+                                            'height' => 500,
+                                            'filebrowserUploadUrl' => 'ckeditorupload',
+                                            'filebrowserUploadMethod'  => "form",
 
-                            <?= $form->field($model, 'content')->widget(CKEditor::className(), [
-                                'options' => ['rows' => 10],
-                                'preset' => 'advanced'
-                            ]) ?>
+                                            'toolbarGroups' => [
+                                                ['name' => 'undo'],
+                                                ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
+                                                ['name' => 'paragraph', 'groups' => ['list', 'indent', 'blocks', 'align', 'bidi']],
+                                                ['name' => 'styles'],
+                                                ['name' => 'links', 'groups' => ['links', 'insert']]
+                                            ]
+
+                                        ]
+
+                                    ]
+                                )
+
+                            ?>
 
                         </div>
                     </div>

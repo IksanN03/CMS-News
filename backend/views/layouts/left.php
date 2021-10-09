@@ -41,17 +41,8 @@ $model1 = Menu::find()->all();
                         ['label' => '<font color="white">Profil</font>', 'encode' => false, 'url' => ['/profil/view?id=1']],
                     ],
                 ],
-                [
-                    'label' => '<font color="white">Pengaturan Menu</font>',
-                    'icon' => 'bars',
-                    'encode' => false,
-                    'url' => '#',
-                    'options' => ['class' => 'treeview'],
-                    'items' => [
-                        ['label' => '<font color="white">Menu Utama</font>', 'encode' => false, 'url' => ['/menu/index']],
-                        ['label' => '<font color="white">Submenu</font>', 'encode' => false, 'url' => ['/submenu/index']],
-                    ],
-                ],
+                ['label' => '<font color="white">Pengaturan Menu</font>', 'encode' => false, 'url' => ['/menu/index']],
+
                 [
                     'label' => '<font color="white">Manajemen Laman</font>',
                     'icon' => 'clone',
