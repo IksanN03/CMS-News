@@ -246,7 +246,7 @@ class NewsController extends Controller
             $allowExtention = array("jpg", "jpeg", "png", "JPG", "JPEG", "PNG");
             if (in_array($extension, $allowExtention)) {
                 move_uploaded_file($file, "./uploads" . $newImageName);
-                $url = Url::base() . "/uploads" . $newImageName;
+                $url = Url::base('http') . "/uploads" . $newImageName;
                 $message = "";
                 echo '<script type="text/javascript">window.parent.CKEDITOR.tools.callFunction("'
                     . $funcNum . '", "' . $url . '", "' . $message . '" );</script>';
