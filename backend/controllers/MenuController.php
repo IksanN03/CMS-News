@@ -2,10 +2,8 @@
 
 namespace backend\controllers;
 
-use Codeception\Command\Run;
 use Yii;
 use common\models\entity\Menu;
-use common\models\entity\Sub;
 use common\models\search\MenuSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -67,10 +65,11 @@ class MenuController extends Controller
     public function actionCreate()
     {
         $model = new Menu();
+
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                $model->Submenu = Yii::$app->request->post('Submenu', []);
+                $model->submenus = Yii::$app->request->post('Submenu', []);
                 if ($model->save()) {
                     $transaction->commit();
                 } else {
@@ -81,14 +80,12 @@ class MenuController extends Controller
                 Yii::$app->session->addFlash('error', $ecx->getMessage());
                 $transaction->rollBack();
             }
-
-            if (!$model->save()) Yii::$app->session->addFlash('error', \yii\helpers\Json::encode($model->errors));
-        } else if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_form', [
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('create', [
                 'model' => $model,
             ]);
         }
-        return $this->redirect(['index']);
     }
 
     /**
@@ -102,27 +99,12 @@ class MenuController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $transaction = Yii::$app->db->beginTransaction();
-            try {
-                $model->Submenu = Yii::$app->request->post('Submenu', []);
-                if ($model->save()) {
-                    $transaction->commit();
-                } else {
-                    Yii::$app->session->addFlash('error', \yii\helpers\Json::encode($model->errors));
-                    $transaction->rollBack();
-                }
-            } catch (\Exception $ecx) {
-                Yii::$app->session->addFlash('error', $ecx->getMessage());
-                $transaction->rollBack();
-            }
-
             return $this->redirect(['view', 'id' => $model->id]);
-        } else if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_form', [
+        } else {
+            return $this->render('update', [
                 'model' => $model,
             ]);
         }
-        return $this->redirect(['index']);
     }
 
     /**

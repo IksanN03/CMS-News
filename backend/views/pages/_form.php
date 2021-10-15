@@ -36,9 +36,25 @@ use kartik\widgets\DatePicker;
                             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
 
-                            <?= $form->field($model, 'content')->widget(CKEditor::className(), [
-                                'options' => ['rows' => 10],
-                                'preset' => 'advanced'
+                            <?= $form->field($model, 'content')->widget(CKEditor::className(),  [
+                                'options' => [],
+                                'preset' => 'full',
+                                'clientOptions' => [
+                                    'extraPlugins' => '',
+                                    'height' => 500,
+                                    'filebrowserUploadUrl' => 'ckeditorupload',
+                                    'filebrowserUploadMethod'  => "form",
+
+                                    'toolbarGroups' => [
+                                        ['name' => 'undo'],
+                                        ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup']],
+                                        ['name' => 'paragraph', 'groups' => ['list', 'indent', 'blocks', 'align', 'bidi']],
+                                        ['name' => 'styles'],
+                                        ['name' => 'links', 'groups' => ['links', 'insert']]
+                                    ]
+
+                                ]
+
                             ]) ?>
 
                         </div>

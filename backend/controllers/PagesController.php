@@ -2,13 +2,16 @@
 
 namespace backend\controllers;
 
+use common\models\entity\News;
 use Yii;
 use common\models\entity\Pages;
+use common\models\search\NewsSearch;
 use common\models\search\PagesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\db\IntegrityException;
+use yii\helpers\Url;
 use yii\web\UploadedFile;
 
 /**
@@ -37,7 +40,7 @@ class PagesController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new PagesSearch();
+        $searchModel = new NewsSearch(['type'=>1]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -60,10 +63,11 @@ class PagesController extends Controller
 
     public function actionCreate()
     {
-        $model = new Pages();
+        $model = new News();
         $model->author_id = Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
             $model->publish_at = time();
+            $model->type = 1;
             try {
                 if ($model->save()) {
                 } else {
@@ -143,7 +147,7 @@ class PagesController extends Controller
      */
     public function actionDelete($id = '')
     {
-        $model = new Pages();
+        $model = new News();
         try {
             if (Yii::$app->request->isAjax) {
                 $data = [];
@@ -173,10 +177,32 @@ class PagesController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Pages::findOne($id)) !== null) {
+        if (($model = News::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionCkeditorupload()
+    {
+        $funcNum = $_REQUEST['CKEditorFuncNum'];
+
+        if (isset($_FILES['upload']['tmp_name'])) {
+
+            $file = $_FILES['upload']['tmp_name'];
+            $fileName = $_FILES['upload']['name'];
+            $fileNameArray = explode(".", $fileName);
+            $extension = end($fileNameArray);
+            $newImageName = rand() . "." . $extension;
+            $allowExtention = array("jpg", "jpeg", "png", "JPG", "JPEG", "PNG");
+            if (in_array($extension, $allowExtention)) {
+                move_uploaded_file($file, "./uploads" . $newImageName);
+                $url = Url::base() . "/uploads" . $newImageName;
+                $message = "";
+                echo '<script type="text/javascript">window.parent.CKEDITOR.tools.callFunction("'
+                    . $funcNum . '", "' . $url . '", "' . $message . '" );</script>';
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\entity\Menu */
 
-$this->title = $model->id;
+$this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Menu', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="menu-view">
 
     <p>
-        <?= Html::a('<i class="glyphicon glyphicon-pencil"></i> ' . 'Update', ['update', 'id' => $model->id], [
+        <?= Html::a('<i class="glyphicon glyphicon-pencil"></i> '. 'Update', ['update', 'id' => $model->id], [
             'class' => 'btn btn-warning',
         ]) ?>
         <?= Html::a('<i class="glyphicon glyphicon-trash"></i> ' . 'Delete', ['delete', 'id' => $model->id], [
@@ -33,9 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'model' => $model,
             'attributes' => [
                 // 'id',
-                'category.name:text:Category',
-                'pages.name:text:Pages',
-                'submenus.nama',
+                'name',
+                'pageArt.name:text:Page Art',
                 // 'created_at:datetime',
                 // 'updated_at:datetime',
                 // 'createdBy.username:text:Created By',
@@ -43,5 +42,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </div>
-
+    
 </div>

@@ -74,8 +74,8 @@ class News extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'author_id', 'content', 'status'], 'required'],
-            [['category_id', 'publish_at', 'author_id', 'views', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['title', 'author_id', 'content', 'status', 'type'], 'required'],
+            [['category_id', 'publish_at', 'type', 'author_id', 'views', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['content'], 'string'],
             [['title', 'photo'], 'string', 'max' => 225],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
@@ -103,6 +103,7 @@ class News extends \yii\db\ActiveRecord
             'photo' => 'Foto',
             'views' => 'views',
             'status' => 'Status',
+            'type' => 'Tipe',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
@@ -174,5 +175,40 @@ class News extends \yii\db\ActiveRecord
     public function getSubcategory()
     {
         return $this->hasOne(Subcategory::className(), ['id' => 'subcategory_id']);
+    }
+
+    // Firebase Cloud Messaging Authorization Key
+    public function sendPush($to, $title, $body, $icon, $url)
+    {
+        $FCMAUTH = 'AAAAHlvXpBg:APA91bEAhBeFTvod0YpV4uxeoRF_Hm4fEahrZQvVQRhejBqLaB05AxEkf8oeupEttOE7O7FbJ9qVVTEhsrytij3hWd9jevItMMgastUs-LT2gAKK3CtYarpOmJ-Qrw3siUNxLjbjMce_';
+        $postdata = json_encode(
+            [
+                'notification' =>
+                [
+                    'title' => $title,
+                    'body' => $body,
+                    'icon' => $icon,
+                    'click_action' => $url
+                ],
+                'to' => $to
+            ]
+        );
+
+        $opts = array(
+            'http' =>
+            array(
+                'method'  => 'POST',
+                'header'  => 'Content-type: application/json' . "\r\n"
+                    . 'Authorization: key=' . $FCMAUTH . "\r\n",
+                'content' => $postdata
+            )
+        );
+
+        $context  = stream_context_create($opts);
+
+        $result = file_get_contents('https://fcm.googleapis.com/fcm/send', false, $context);
+        if ($result) {
+            return json_decode($result);
+        } else return false;
     }
 }

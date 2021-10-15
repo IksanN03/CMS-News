@@ -20,7 +20,7 @@ class NewsSearch extends News
     public function rules()
     {
         return [
-            [['id', 'category_id', 'subcategory_id', 'publish_at', 'author_id', 'views', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['id', 'category_id', 'subcategory_id', 'publish_at', 'author_id', 'views', 'status', 'type','created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['title', 'content', 'photo', 'date1', 'date2'], 'safe'],
         ];
     }
@@ -68,6 +68,7 @@ class NewsSearch extends News
             'author_id' => $this->author_id,
             'views' => $this->views,
             'status' => $this->status,
+            'type' => $this->type,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,

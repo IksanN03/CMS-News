@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\entity\News;
 use common\models\entity\Subcategory;
+use common\models\entity\TokenFcm;
 use common\models\search\NewsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -40,7 +41,7 @@ class NewsController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new NewsSearch();
+        $searchModel = new NewsSearch(['type' => 2]);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -71,11 +72,16 @@ class NewsController extends Controller
         $model = new News();
         $model->author_id = Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
+            $model->type = 2;
             $model->publish_at = time();
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $model->Files = Yii::$app->request->post('Files', []);
                 if ($model->save()) {
+                    $tokens = TokenFcm::find()->all();
+                    foreach ($tokens as $token) {
+                        $model->sendPush($token->token, substr($model->title,0,10), substr($model->content, 0,100), 'https://picsum.photos/id/10/200', 'https://picsum.photos/id/10/200');
+                    }
                     $transaction->commit();
                 } else {
                     Yii::$app->session->addFlash('error', \yii\helpers\Json::encode($model->errors));

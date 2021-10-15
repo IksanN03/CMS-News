@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'subcategory.name:text:Subcategory',
                 'publish_at:date',
                 'author.name:text:Author',
-                'content:ntext',
+                'content:html',
                 [
                     'attribute' => 'photo',
                     'value' => function ($model) {

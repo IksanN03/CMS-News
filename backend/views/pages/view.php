@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'title',
                 'publish_at:date',
                 'author.name:text:Author',
-                'content:ntext',
+                'content:html',
                 [
                     'attribute' => 'photo',
                     'value' => function ($model) {

@@ -18,7 +18,8 @@ class MenuSearch extends Menu
     public function rules()
     {
         return [
-            [['id', 'category_id', 'pages_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['id', 'news_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['name'], 'safe'],
         ];
     }
 
@@ -59,13 +60,14 @@ class MenuSearch extends Menu
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'category_id' => $this->category_id,
-            'pages_id' => $this->pages_id,
+            'news_id' => $this->news_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,
         ]);
+
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

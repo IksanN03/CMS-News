@@ -8,16 +8,14 @@ use Yii;
  * This is the model class for table "menu".
  *
  * @property integer $id
- * @property integer $category_id
- * @property integer $pages_id
- * @property integer $submenu_id
+ * @property string $name
+ * @property integer $news_id
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $created_by
  * @property integer $updated_by
  *
- * @property Category $category
- * @property Pages $pages
+ * @property News $news
  * @property User $createdBy
  * @property User $updatedBy
  * @property Submenu[] $submenus
@@ -35,7 +33,7 @@ class Menu extends \yii\db\ActiveRecord
             \yii\behaviors\BlameableBehavior::className(),
         ];
     }
-
+    
     /**
      * @inheritdoc
      */
@@ -50,9 +48,10 @@ class Menu extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'pages_id', 'submenu_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
-            [['pages_id'], 'exist', 'skipOnError' => true, 'targetClass' => Pages::className(), 'targetAttribute' => ['pages_id' => 'id']],
+            [['name'], 'required'],
+            [['news_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['name'], 'string', 'max' => 225],
+            [['news_id'], 'exist', 'skipOnError' => true, 'targetClass' => News::className(), 'targetAttribute' => ['news_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
         ];
@@ -64,9 +63,9 @@ class Menu extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'Bagian',
-            'category_id' => 'Category',
-            'pages_id' => 'Pages',
+            'id' => 'ID',
+            'name' => 'Name',
+            'news_id' => 'Konten yang ditampilkan',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
@@ -77,17 +76,9 @@ class Menu extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCategory()
+    public function getNews()
     {
-        return $this->hasOne(Category::className(), ['id' => 'category_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPages()
-    {
-        return $this->hasOne(Pages::className(), ['id' => 'pages_id']);
+        return $this->hasOne(News::className(), ['id' => 'news_id']);
     }
 
     /**
@@ -109,16 +100,13 @@ class Menu extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSubmenu()
+    public function getSubmenus()
     {
         return $this->hasMany(Submenu::className(), ['menu_id' => 'id']);
     }
-    public function getSubmenus()
+    public function setSubmenus($value)
     {
-        return $this->hasOne(Submenu::className(), ['menu_id' => 'id']);
+        $this->loadRelated('submenus', $value);
     }
-    public function setSubmenu($value)
-    {
-        $this->loadRelated('submenu', $value);
-    }
+
 }
