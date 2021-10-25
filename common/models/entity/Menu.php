@@ -33,7 +33,7 @@ class Menu extends \yii\db\ActiveRecord
             \yii\behaviors\BlameableBehavior::className(),
         ];
     }
-    
+
     /**
      * @inheritdoc
      */
@@ -50,7 +50,7 @@ class Menu extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['news_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['name'], 'string', 'max' => 225],
+            [['name','submenu'], 'string', 'max' => 225],
             [['news_id'], 'exist', 'skipOnError' => true, 'targetClass' => News::className(), 'targetAttribute' => ['news_id' => 'id']],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['created_by' => 'id']],
             [['updated_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['updated_by' => 'id']],
@@ -64,12 +64,13 @@ class Menu extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'name' => 'Nama Menu',
             'news_id' => 'Konten yang ditampilkan',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
             'updated_by' => 'Updated By',
+            'submenu' => 'Tambahkan submenu?'
         ];
     }
 
@@ -109,4 +110,19 @@ class Menu extends \yii\db\ActiveRecord
         $this->loadRelated('submenus', $value);
     }
 
+    public static function getContent($id)
+    {
+        $menu = Menu::findOne($id);
+        $submenus =  Submenu::find()->where(['menu_id' => $id]);
+        $object = $submenus->all();
+        $array = [];
+        foreach ($object as $object) {
+            $array[] = '- ' . $object->news->title;
+        }
+        if ($submenus->count() == 0) {
+            return $menu->news->title;
+        } else {
+            return implode('<br>', $array);
+        }
+    }
 }

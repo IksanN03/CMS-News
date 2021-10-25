@@ -1,5 +1,6 @@
 <?php
 
+use common\models\entity\Menu;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
@@ -76,7 +77,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Html::a('', $url, ['class' => 'glyphicon glyphicon-eye-open btn btn-xs btn-default btn-text-info']);
                     },
                     'update' => function ($url) {
-                        return Html::a('', $url, ['class' => 'glyphicon glyphicon-pencil btn btn-xs btn-default btn-text-warning']);
+                        return Html::button('', [
+                            'class' => 'glyphicon glyphicon-pencil btn btn-xs btn-default btn-text-warning showModalButton',
+                            'value' => $url,
+                            'title' => 'Edit Menu'
+                        ]);
                     },
                     'delete' => function ($url) {
                         return Html::a('', $url, [
@@ -89,13 +94,14 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'id',
             'name',
             [
-                'attribute' => 'news_id',
-                'value' => 'news.title',
-                'filterType' => GridView::FILTER_SELECT2,
-                'filter' => ArrayHelper::map(PagesArticles::find()->orderBy('title')->asArray()->all(), 'id', 'title'), 
-                'filterInputOptions'=>['placeholder'=>''],
-                'filterWidgetOptions' => [
-                    'pluginOptions' => ['allowClear'=>true],
+                // 'attribute' => 'news_id',
+                'label' => 'konten yang ditampikan / submenu',
+                'value' => function($model){
+                    return Menu::getContent($model->id);
+                },
+                'format' => 'html',
+                'contentOptions' => [
+                    'class' => 'text-wrap',            
                 ],
             ],
             // 'created_at:integer',
@@ -113,7 +119,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'striped' => false,
         'bordered' => false,
         'toolbar'=> [
-            Html::a('<i class="fa fa-plus"></i> ' . 'Create', ['create'], ['class' => 'btn btn-success']),
+            Html::button('<i class="fa fa-plus"></i> ' . 'Tambah', [
+                'class' => 'btn btn-success showModalButton',
+                'value' => 'create',
+                'title' => 'Tambah Menu'
+            ]),
             Html::a('<i class="fa fa-repeat"></i> ' . 'Reload', ['index'], ['data-pjax'=>0, 'class'=>'btn btn-default']),
             '{toggleData}',
             // $exportMenu,

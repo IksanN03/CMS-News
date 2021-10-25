@@ -6,7 +6,9 @@ use common\models\entity\Menu;
 use common\models\entity\News;
 use common\models\entity\Submenu;
 use common\models\entity\TokenFcm;
+use DateTime;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\helpers\Html;
@@ -64,13 +66,31 @@ class MenuController extends \yii\rest\Controller
 
     public function actionArticles()
     {
-        $modelpopular = News::find()->where(['type' => 2])->orderBy('views ASC')->limit(15)->all();
+        $modelpopular = News::find()->where(['type' => 2, 'status'=>'1'])->orderBy('views ASC')->limit(15)->all();
         $popular = [];
         foreach ($modelpopular as $modelpopular) {
+            $diff = time() - $modelpopular->publish_at;
+            $jam = floor($diff / (60 * 60));
+            $menit = $diff - $jam * (60 * 60);
+            $hari = floor($diff / (60 * 60 * 24));
+    
+            if ($jam < 24) {
+                if ($menit < 60)
+                    $publish_at = $menit . ' menit yang lalu';
+                else
+                    $publish_at = $jam . ' Jam yang lalu';
+            } else {
+                if ($hari < 5)
+                    $publish_at = $hari . ' Hari yang lalu';
+                else
+                    $publish_at = date('Y-m-d');
+            }
+
             $arr = [[
                 'id' => $modelpopular->id,
                 'title' => $modelpopular->title,
                 'desc' => '',
+                'publish_at' => $publish_at,
                 'uri' => $modelpopular->photo ? Url::home('http') . Url::to('menu/file-news?id=' . $modelpopular->id) : null
             ]];
 
@@ -78,13 +98,32 @@ class MenuController extends \yii\rest\Controller
         }
         $dataPopular = [['title' => 'Terpopuler', 'horizontal' => true, 'data' => $popular]];
 
-        $modelrecent = News::find()->where(['type' => 2])->orderBy('id ASC')->limit(15)->all();
+        $modelrecent = News::find()->where(['type' => 2, 'status'=>'1'])->orderBy('id ASC')->limit(15)->all();
         $popular = [];
         foreach ($modelrecent as $modelrecent) {
+
+            $diff = time() - $modelrecent->publish_at;
+            $jam = floor($diff / (60 * 60));
+            $menit = $diff - $jam * (60 * 60);
+            $hari = floor($diff / (60 * 60 * 24));
+    
+            if ($jam < 24) {
+                if ($menit < 60)
+                    $publish_at = $menit . ' menit yang lalu';
+                else
+                    $publish_at = $jam . ' Jam yang lalu';
+            } else {
+                if ($hari < 5)
+                    $publish_at = $hari . ' Hari yang lalu';
+                else
+                    $publish_at = date('Y-m-d');
+            }
+
             $arr = [[
                 'id' => $modelrecent->id,
                 'title' => $modelrecent->title,
                 'desc' => $modelrecent->content,
+                'publish_at' => $publish_at,
                 'uri' => $modelrecent->photo ? Url::home('http') . Url::to('menu/file-news?id=' . $modelrecent->id) : null
             ]];
 
@@ -97,35 +136,81 @@ class MenuController extends \yii\rest\Controller
         return json_encode($data);
     }
 
-    public function actionAll()
-    {
+    public function actionAll(){
+        $query = News::find()->where(['type' => 2, 'status'=>'1'])->orderBy('id ASC');
 
-        $modelrecent = News::find()->where(['type' => 2])->orderBy('id ASC')->limit(50)->all();
-        $popular = [];
-        foreach ($modelrecent as $modelrecent) {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'defaultPageSize' => 2, //set page size here
+            ]
+        ]);
+        $relationShips = $dataProvider->getModels();
+        $data = [];
+        foreach ($relationShips as $key) {
+            $diff = time() - $key->publish_at;
+            $jam = floor($diff / (60 * 60));
+            $menit = $diff - $jam * (60 * 60);
+            $hari = floor($diff / (60 * 60 * 24));
+    
+            if ($jam < 24) {
+                if ($menit < 60)
+                    $publish_at = $menit . ' menit yang lalu';
+                else
+                    $publish_at = $jam . ' Jam yang lalu';
+            } else {
+                if ($hari < 5)
+                    $publish_at = $hari . ' Hari yang lalu';
+                else
+                    $publish_at = date('Y-m-d');
+            }
             $arr = [[
-                'id' => $modelrecent->id,
-                'title' => $modelrecent->title,
-                'desc' => $modelrecent->content,
-                'uri' => $modelrecent->photo ? Url::home('http') . Url::to('menu/file-news?id=' . $modelrecent->id) : null
+                'id' => $key->id,
+                'title' => $key->title,
+                'author' => $key->author->name,
+                'desc' => $key->content,
+                'publish_at' => $publish_at,
+                // 'category' => $key->category->category_name,
+                // 'url_photo' => Url::base(true) . '/file/file-news?id='.$key->id,
+                'uri' => $key->photo ? Url::home('http') . Url::to('menu/file-news?id=' . $key->id) : null,
+                'views' => $key->views
             ]];
-
-            $popular = array_merge($arr, $popular);
+            $data = array_merge($data, $arr);
         }
-        $dataRecent = [['title' => 'Semua Berita & Informasi', 'data' => $popular]];
+
+        $dataRecent = [['title' => 'Semua Berita & Informasi', 'data' => $data,  'total_item' => count($data)]];
         return json_encode($dataRecent);
+
     }
+    
     public function actionDetail($id)
     {
         $model = News::findOne($id);
         $model->views = $model->views + 1;
         $model->save();
 
+        $diff = time() - $model->publish_at;
+        $jam = floor($diff / (60 * 60));
+        $menit = $diff - $jam * (60 * 60);
+        $hari = floor($diff / (60 * 60 * 24));
+
+        if ($jam < 24) {
+            if ($menit < 60)
+                $publish_at = $menit . ' menit yang lalu';
+            else
+                $publish_at = $jam . ' Jam yang lalu';
+        } else {
+            if ($hari < 5)
+                $publish_at = $hari . ' Hari yang lalu';
+            else
+                $publish_at = date('Y-m-d');
+        }
+
         $data = [
             'title' => $model->title,
             'uri' => $model->photo ? Url::home('http') . Url::to('menu/file-news?id=' . $model->id) : null,
             'desc' => $model->content,
-            'publish_at' => date('d M Y'),
+            'publish_at' => $publish_at,
             'author' => $model->author->name
         ];
 

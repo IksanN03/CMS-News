@@ -19,20 +19,22 @@ use mdm\widgets\TabularInput;
 <div class="menu-form">
 
     <div class="row">
-        <div class="col-md-8 col-sm-12">
+        <div class="col-md-12 col-sm-12">
 
             <?php $form = ActiveForm::begin(); ?>
 
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-
-            <?= $form->field($model, 'news_id')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(News::find()->all(), 'id', 'title'),
-                'options' => ['placeholder' => ''],
-                'pluginOptions' => ['allowClear' => true],
-            ]); ?>
+            <div id="konten">
+                <?= $form->field($model, 'news_id')->widget(Select2::classname(), [
+                    'data' => ArrayHelper::map(News::find()->all(), 'id', 'title'),
+                    'options' => ['placeholder' => ''],
+                    'pluginOptions' => ['allowClear' => true],
+                ]); ?>
+            </div>
             <p>
+                <?= Html::activeCheckbox($model, 'submenu', ['value'=>1]) ?>
 
-            <table class="table table-condensed table-hover" style="margin-left:-5px;margin-top:-10px;">
+            <table class="table table-condensed table-hover" id="tabel" style="margin-left:-5px;margin-top:-10px;">
                 <thead>
                     <tr>
                         <th>Submenu</th>
@@ -70,3 +72,24 @@ use mdm\widgets\TabularInput;
     </div>
 
 </div>
+
+<?php
+
+$this->registerJs('
+        $("#konten").show();
+        $("#tabel").hide();
+            $("#menu-submenu").click(function(){
+                if($(this).is(":checked")){
+                   console.log("ac")
+                   $("#konten").hide();
+                   $("#tabel").show();
+                } else {
+                    $("#konten").show();
+                    $("#tabel").hide();
+                }
+
+            });
+
+        ');
+
+?>

@@ -77,7 +77,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'contentOptions' => ['class' => 'text-right serial-column'],
         ],
         // 'id',
-        'title',
+        [
+            'attribute' => 'title',
+            'contentOptions' => [
+                'class' => 'text-wrap',
+            ],
+        ],
         [
             'attribute' => 'author_id',
             'value' => 'author.name',

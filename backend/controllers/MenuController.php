@@ -81,11 +81,12 @@ class MenuController extends Controller
                 $transaction->rollBack();
             }
             return $this->redirect(['index']);
-        } else {
-            return $this->render('create', [
+        } else if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_form', [
                 'model' => $model,
             ]);
         }
+        return $this->redirect(['index']);
     }
 
     /**
@@ -97,14 +98,27 @@ class MenuController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
+        if ($model->load(Yii::$app->request->post())) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->submenus = Yii::$app->request->post('Submenu', []);
+                if ($model->save()) {
+                    $transaction->commit();
+                } else {
+                    Yii::$app->session->addFlash('error', \yii\helpers\Json::encode($model->errors));
+                    $transaction->rollBack();
+                }
+            } catch (\Exception $ecx) {
+                Yii::$app->session->addFlash('error', $ecx->getMessage());
+                $transaction->rollBack();
+            }
+            return $this->redirect(['index']);
+        } else if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_form', [
                 'model' => $model,
             ]);
         }
+        return $this->redirect(['index']);
     }
 
     /**
