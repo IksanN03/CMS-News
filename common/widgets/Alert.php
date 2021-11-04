@@ -22,7 +22,7 @@ use Yii;
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @author Alexander Makarov <sam@rmcreative.ru>
  */
-class Alert extends \yii\bootstrap\Widget
+class Alert extends \yii\bootstrap4\Widget
 {
     /**
      * @var array the alert types configuration for the flash messages.
@@ -31,11 +31,11 @@ class Alert extends \yii\bootstrap\Widget
      * - value: the bootstrap alert type (i.e. danger, success, info, warning)
      */
     public $alertTypes = [
-        'error'   => 'alert-danger',
-        'danger'  => 'alert-danger',
-        'success' => 'alert-success',
-        'info'    => 'alert-info',
-        'warning' => 'alert-warning'
+        'error'   => 'alert-custom alert-light-danger',
+        'danger'  => 'alert-custom alert-light-danger',
+        'success' => 'alert-custom alert-light-success',
+        'info'    => 'alert-custom alert-light-info',
+        'warning' => 'alert-custom alert-light-warning'
     ];
     /**
      * @var array the options for rendering the close button tag.
@@ -59,12 +59,13 @@ class Alert extends \yii\bootstrap\Widget
             }
 
             foreach ((array) $flash as $i => $message) {
-                echo \yii\bootstrap\Alert::widget([
+                echo \yii\bootstrap4\Alert::widget([
                     'body' => $message,
                     'closeButton' => $this->closeButton,
                     'options' => array_merge($this->options, [
                         'id' => $this->getId() . '-' . $type . '-' . $i,
-                        'class' => $this->alertTypes[$type] . $appendClass,
+                        'class' => $this->alertTypes[$type] . $appendClass . ' col-sm-12',
+                        'style' => 'display:inline-block',
                     ]),
                 ]);
             }

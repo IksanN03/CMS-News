@@ -8,8 +8,6 @@ $params = array_merge(
 
 return [
     'id' => 'APP-backend',
-    'name' => '
-    <i class="fa fa-university" aria-hidden="true" style="color:white;"></i><font style="color:white;"> PPID </font><font style="color:#1FBFA2;">PNP</font>',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],

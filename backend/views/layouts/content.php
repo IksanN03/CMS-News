@@ -11,7 +11,7 @@ use dmstr\widgets\Alert;
             <?php if (isset($this->blocks['content-header'])) { ?>
                 <h1><?= $this->blocks['content-header'] ?></h1>
             <?php } else { ?>
-                <h1 style="font-family: cursive; color:#023e8a; text-shadow: 1px 1px 1px #0FF29F" class="animate__animated  animate__headShake">
+                <h2 style="font-family: cursive; color:#3699FF; text-shadow: 1px 1px 1px #0FF29F;margin:0px 0px 15px 0px;" class="animate__animated  animate__headShake">
                     <?php
                     if ($this->title !== null) {
                         // echo \yii\helpers\Html::encode($this->title);
@@ -22,7 +22,7 @@ use dmstr\widgets\Alert;
                         );
                         echo ($this->context->module->id !== \Yii::$app->id) ? '<small>Module</small>' : '';
                     } ?>
-                </h1>
+                </h2>
             <?php } ?>
 
             <?=
@@ -40,13 +40,3 @@ use dmstr\widgets\Alert;
         <?= $content ?>
     </section>
 </div>
-
-<footer class="main-footer">
-    <div class="pull-right hidden-xs">
-        <!-- <b>Version</b> 2.0 -->
-    </div>
-    <strong>POLITEKNIK NEGERI PADANG &copy; </strong>
-    <small>
-        All rights reserved.
-    </small>
-</footer>

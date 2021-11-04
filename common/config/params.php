@@ -7,4 +7,15 @@ return [
     'user.passwordResetTokenExpire' => 3600,
     'minimumPassedScore' => 70,
     'fileStorage'  => '@uploads/',
+    'iconTrue'                      => '<i class="fas fa-check-square text-success"></i>',
+    'iconFalse'                     => '<i class="fas fa-minus text-danger"></i>',
+
+    'brand'            => 'PPID',
+    'longBrand'        => 'PPID',
+    'companyName'      => 'PPID',
+    'companyAddress'   => 'earth, milkyway galactic',
+    'companyPhone'     => '',
+    'companyTaxNumber' => '',
+
+    'pageSubtitle' => '',
 ];

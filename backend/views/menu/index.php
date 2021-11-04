@@ -16,115 +16,121 @@ use common\models\entity\PagesArticles;
 
 $this->title = 'Menu';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <div class="menu-index">
 
-    <?php 
-        $exportColumns = [
-            [
-                'class' => 'yii\grid\SerialColumn',
-            ],
-            'id',
-            'name',
-            'pageArt.name:text:Page art',
-            'created_at:datetime',
-            'updated_at:datetime',
-            'createdBy.username:text:Created By',
-            'updatedBy.username:text:Updated By',
-        ];
+    <?php
+    $exportColumns = [
+        [
+            'class' => 'yii\grid\SerialColumn',
+        ],
+        'id',
+        'name',
+        'pageArt.name:text:Page art',
+        'created_at:datetime',
+        'updated_at:datetime',
+        'createdBy.username:text:Created By',
+        'updatedBy.username:text:Updated By',
+    ];
 
-        $exportMenu = ExportMenu::widget([
-            'dataProvider' => $dataProvider,
-            'columns' => $exportColumns,
-            'filename' => 'Menu',
-            'fontAwesome' => true,
-            'dropdownOptions' => [
-                'label' => 'Export',
-                'class' => 'btn btn-default'
-            ],
-            'target' => ExportMenu::TARGET_SELF,
-            'exportConfig' => [
-                ExportMenu::FORMAT_CSV => false,
-                ExportMenu::FORMAT_EXCEL => false,
-                ExportMenu::FORMAT_HTML => false,
-            ],
-            'styleOptions' => [
-                ExportMenu::FORMAT_EXCEL_X => [
-                    'font' => [
-                        'color' => ['argb' => '00000000'],
-                    ],
-                    'fill' => [
-                        // 'type' => PHPExcel_Style_Fill::FILL_NONE,
-                        'color' => ['argb' => 'DDDDDDDD'],
-                    ],
+    $exportMenu = ExportMenu::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => $exportColumns,
+        'filename' => 'Menu',
+        'fontAwesome' => true,
+        'dropdownOptions' => [
+            'label' => 'Export',
+            'class' => 'btn btn-default'
+        ],
+        'target' => ExportMenu::TARGET_SELF,
+        'exportConfig' => [
+            ExportMenu::FORMAT_CSV => false,
+            ExportMenu::FORMAT_EXCEL => false,
+            ExportMenu::FORMAT_HTML => false,
+        ],
+        'styleOptions' => [
+            ExportMenu::FORMAT_EXCEL_X => [
+                'font' => [
+                    'color' => ['argb' => '00000000'],
+                ],
+                'fill' => [
+                    // 'type' => PHPExcel_Style_Fill::FILL_NONE,
+                    'color' => ['argb' => 'DDDDDDDD'],
                 ],
             ],
-            'pjaxContainerId' => 'grid',
-        ]);
+        ],
+        'pjaxContainerId' => 'grid',
+    ]);
 
-        $gridColumns = [
-            [
-                'class' => 'yii\grid\SerialColumn',
-                'headerOptions' => ['class' => 'text-right serial-column'],
-                'contentOptions' => ['class' => 'text-right serial-column'],
-            ],
-            [
-                'contentOptions' => ['class' => 'action-column nowrap text-left'],
-                'class' => 'yii\grid\ActionColumn',
-                'buttons' => [
-                    'view' => function ($url) {
-                        return Html::a('', $url, ['class' => 'glyphicon glyphicon-eye-open btn btn-xs btn-default btn-text-info']);
-                    },
-                    'update' => function ($url) {
-                        return Html::button('', [
-                            'class' => 'glyphicon glyphicon-pencil btn btn-xs btn-default btn-text-warning showModalButton',
-                            'value' => $url,
-                            'title' => 'Edit Menu'
-                        ]);
-                    },
-                    'delete' => function ($url) {
-                        return Html::a('', $url, [
-                            'class' => 'glyphicon glyphicon-trash btn btn-xs btn-default btn-text-danger', 
-                            'data-method' => 'post', 
-                            'data-confirm' => 'Are you sure you want to delete this item?']);
-                    },
-                ],
-            ],
-            // 'id',
-            'name',
-            [
-                // 'attribute' => 'news_id',
-                'label' => 'konten yang ditampikan / submenu',
-                'value' => function($model){
-                    return Menu::getContent($model->id);
+    $gridColumns = [
+        [
+            'class' => 'yii\grid\SerialColumn',
+            'headerOptions' => ['class' => 'text-right serial-column'],
+            'contentOptions' => ['class' => 'text-right serial-column'],
+        ],
+        [
+            'contentOptions' => ['class' => 'action-column nowrap text-left'],
+            'class' => 'yii\grid\ActionColumn',
+            'buttons' => [
+                'view' => function ($url) {
+                    return Html::a('', $url, ['class' => 'glyphicon glyphicon-eye-open btn btn-xs btn-default btn-text-info']);
                 },
-                'format' => 'html',
-                'contentOptions' => [
-                    'class' => 'text-wrap',            
-                ],
+                'update' => function ($url) {
+                    return Html::button('', [
+                        'class' => 'glyphicon glyphicon-pencil btn btn-xs btn-default btn-text-warning showModalButton',
+                        'value' => $url,
+                        'title' => 'Edit Menu'
+                    ]);
+                },
+                'delete' => function ($url) {
+                    return Html::a('', $url, [
+                        'class' => 'glyphicon glyphicon-trash btn btn-xs btn-default btn-text-danger',
+                        'data-method' => 'post',
+                        'data-confirm' => 'Are you sure you want to delete this item?'
+                    ]);
+                },
             ],
-            // 'created_at:integer',
-            // 'updated_at:integer',
-            // 'created_by:integer',
-            // 'updated_by:integer',
-        ];
+        ],
+        // 'id',
+        'name',
+        [
+            // 'attribute' => 'news_id',
+            'label' => 'konten yang ditampikan / submenu',
+            'value' => function ($model) {
+                return Menu::getContent($model->id);
+            },
+            'format' => 'html',
+            'contentOptions' => [
+                'class' => 'text-wrap',
+            ],
+        ],
+        // 'created_at:integer',
+        // 'updated_at:integer',
+        // 'created_by:integer',
+        // 'updated_by:integer',
+    ];
     ?>
 
     <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'responsiveWrap' => false,
-        'pjax' => true,
-        'hover' => true,
-        'striped' => false,
-        'bordered' => false,
-        'toolbar'=> [
-            Html::button('<i class="fa fa-plus"></i> ' . 'Tambah', [
-                'class' => 'btn btn-success showModalButton',
+        'dataProvider'     => $dataProvider,
+        'filterModel'      => $searchModel,
+        'columns'          => $gridColumns,
+        'responsiveWrap'   => false,
+        'pjax'             => true,
+        'hover'            => true,
+        'striped'          => false,
+        'bordered'         => false,
+        'pjaxSettings'     => ['options' => ['id' => 'grid']],
+        'headerRowOptions' => ['class' => 'thead-light'],
+        'toolbar'          => [
+            Html::button('<i class="fas fa-plus"></i> Tambah', [
                 'value' => 'create',
-                'title' => 'Tambah Menu'
+                'title' => 'Create',
+                'class' => 'showModalButtonFull btn btn-primary'
             ]),
-            Html::a('<i class="fa fa-repeat"></i> ' . 'Reload', ['index'], ['data-pjax'=>0, 'class'=>'btn btn-default']),
+            Html::a('<i class="fa fa-repeat"></i> ' . 'Reload', ['index'], ['data-pjax' => 0, 'class' => 'btn btn-default']),
             '{toggleData}',
             // $exportMenu,
         ],

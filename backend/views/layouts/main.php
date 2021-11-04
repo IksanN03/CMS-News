@@ -1,66 +1,126 @@
 <?php
 
-use yii\helpers\Html;
-
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-dmstr\web\AdminLteAsset::register($this);
+use app\assets\AppAsset;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\bootstrap4\Nav;
+use yii\bootstrap4\NavBar;
+use yii\bootstrap4\Breadcrumbs;
+use common\widgets\Alert;
+
 backend\assets\AppAsset::register($this);
-
-$directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
-
-$sidebarCollapse = '';
-/* if (($sidebarCollapse_config = \backend\models\Config::findOne(['key' => 'SidebarCollapsed'])) !== null) {
-    if ($sidebarCollapse_config->value == 1) $sidebarCollapse = 'sidebar-collapse';
-} */
 ?>
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 
 <head>
-    <meta charset="<?= Yii::$app->charset ?>" />
+    <meta charset="<?= Yii::$app->charset ?>">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?= Html::csrfMetaTags() ?>
-    <title><?= strip_tags($this->title) ?></title>
+    <?php $this->registerCsrfMetaTags() ?>
+    <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    <link href="https://fonts.googleapis.com/css?family=Titillium+Web:300,400" rel="stylesheet">
 </head>
 
-<body class="hold-transition  sidebar-mini fixed <?= $sidebarCollapse ?>">
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled aside-enabled aside-fixed page-loading">
     <?php $this->beginBody() ?>
-    <div class="wrapper">
 
-        <?= $this->render(
-            'header.php',
-            ['directoryAsset' => $directoryAsset]
-        ) ?>
+    <div class="d-flex flex-column flex-root">
+        <div class="d-flex flex-row flex-column-fluid page">
 
-        <?= $this->render(
-            'left.php',
-            ['directoryAsset' => $directoryAsset]
-        )
-        ?>
+            <?= $this->render('sidebar') ?>
 
-        <?= $this->render(
-            'content.php',
-            ['content' => $content, 'directoryAsset' => $directoryAsset]
-        ) ?>
+            <div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
 
+                <?= $this->render('header') ?>
+                <?= $this->render('header-mobile') ?>
+
+                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                    <div class="subheader py-2 py-lg-3 subheader-transparent" id="kt_subheader">
+                    </div>
+                    <div class="d-flex flex-column-fluid">
+                        <div class="container-fluid">
+                            <?= $this->render(
+                                'content.php',
+                                ['content' => $content]
+                            ) ?>
+                        </div>
+                    </div>
+                </div>
+                <?= $this->render('footer') ?>
+            </div>
+        </div>
     </div>
 
-    <?php
-    yii\bootstrap\Modal::begin([
-        'header'        => '<span id="modalHeaderTitle"></span>',
-        'headerOptions' => ['id' => 'modalHeader', 'style' => 'background-image: linear-gradient(#1FBFA2 10%, #011F26 100%);color:white;text-align:center;'],
-        'id'            => 'modal-universe',
-        'size'          => 'modal-md',
-        // 'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
-    ]);
-    echo "<div id='modalContent'><div style='text-align:center'><img src='" . Yii::getAlias('@web/img/loader.gif') . "'></div></div>";
-    yii\bootstrap\Modal::end();
-    ?>
+    <?= $this->render('modal') ?>
+
+    <!--begin::Global Config(global config for global JS scripts)-->
+    <script>
+        var KTAppSettings = {
+            "breakpoints": {
+                "sm": 576,
+                "md": 768,
+                "lg": 992,
+                "xl": 1200,
+                "xxl": 1400
+            },
+            "colors": {
+                "theme": {
+                    "base": {
+                        "white": "#ffffff",
+                        "primary": "#3699FF",
+                        "secondary": "#E5EAEE",
+                        "success": "#1BC5BD",
+                        "info": "#8950FC",
+                        "warning": "#FFA800",
+                        "danger": "#F64E60",
+                        "light": "#E4E6EF",
+                        "dark": "#181C32"
+                    },
+                    "light": {
+                        "white": "#ffffff",
+                        "primary": "#E1F0FF",
+                        "secondary": "#EBEDF3",
+                        "success": "#C9F7F5",
+                        "info": "#EEE5FF",
+                        "warning": "#FFF4DE",
+                        "danger": "#FFE2E5",
+                        "light": "#F3F6F9",
+                        "dark": "#D6D6E0"
+                    },
+                    "inverse": {
+                        "white": "#ffffff",
+                        "primary": "#ffffff",
+                        "secondary": "#3F4254",
+                        "success": "#ffffff",
+                        "info": "#ffffff",
+                        "warning": "#ffffff",
+                        "danger": "#ffffff",
+                        "light": "#464E5F",
+                        "dark": "#ffffff"
+                    }
+                },
+                "gray": {
+                    "gray-100": "#F3F6F9",
+                    "gray-200": "#EBEDF3",
+                    "gray-300": "#E4E6EF",
+                    "gray-400": "#D1D3E0",
+                    "gray-500": "#B5B5C3",
+                    "gray-600": "#7E8299",
+                    "gray-700": "#5E6278",
+                    "gray-800": "#3F4254",
+                    "gray-900": "#181C32"
+                }
+            },
+            "font-family": "Poppins"
+        };
+    </script>
+    <!--end::Global Config-->
 
     <?php $this->endBody() ?>
 </body>

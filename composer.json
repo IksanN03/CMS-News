@@ -32,7 +32,9 @@
         "mdmsoft/yii2-widgets": "~1.0",
         "mdmsoft/yii2-ar-behaviors": "~1.0",
         "2amigos/yii2-ckeditor-widget" : "~2.1",
-        "iutbay/yii2-kcfinder" : "dev-master"
+        "iutbay/yii2-kcfinder" : "dev-master",
+        "yiisoft/yii2-bootstrap4": "^2.0"
+
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
